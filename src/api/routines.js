@@ -8,7 +8,7 @@ export async function getRoutine(id) {
   return api('GET', `/api/routines/${id}`);
 }
 
-const backendRoutineFields = ['petId', 'name', 'description', 'recurrenceType', 'timeOfDay', 'remindMe', 'medicine', 'medicineInstructions'];
+const backendRoutineFields = ['petId', 'name', 'description', 'recurrenceType', 'timeOfDay', 'remindMe', 'taskType', 'medicine', 'medicineInstructions'];
 
 function toBackendPayload(data) {
   const out = {};

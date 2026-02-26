@@ -10,6 +10,7 @@ function getRoutineIcon(r) {
   const type = r.taskType || (r.medicine ? 'MEDICINE' : r.name?.toLowerCase().includes('walk') ? 'WALK' : 'FOOD');
   if (type === 'MEDICINE') return '💊';
   if (type === 'WALK') return '🦮';
+  if (type === 'MISC') return '📋';
   return '🥣';
 }
 

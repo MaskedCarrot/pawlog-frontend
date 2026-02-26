@@ -10,6 +10,7 @@ const STORAGE_KEY = 'pawlog_user';
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loginInProgress, setLoginInProgress] = useState(false);
   const [authError, setAuthError] = useState(null);
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = useGoogleLogin({
+  const loginWithGoogle = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setAuthError(null);
       try {
@@ -56,15 +57,23 @@ export function AuthProvider({ children }) {
       } catch (err) {
         console.error('Login failed:', err);
         setAuthError(err.message || 'Sign-in failed. Check that the backend is running and CORS is configured.');
+      } finally {
+        setLoginInProgress(false);
       }
     },
     onError: (err) => {
       console.error('Google login failed:', err);
       setAuthError(err.error_description || err.error || 'Google sign-in failed');
+      setLoginInProgress(false);
     },
     flow: 'implicit',
     scope: 'email profile openid',
   });
+
+  const login = () => {
+    setLoginInProgress(true);
+    loginWithGoogle();
+  };
 
   const logout = () => {
     setUser(null);
@@ -92,7 +101,7 @@ export function AuthProvider({ children }) {
   const isProMember = user?.proMemberUntil != null && user.proMemberUntil > Date.now();
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, refreshUser, authError, isProMember, clearAuthError: () => setAuthError(null) }}>
+    <AuthContext.Provider value={{ user, loading, login, loginInProgress, logout, refreshUser, authError, isProMember, clearAuthError: () => setAuthError(null) }}>
       {children}
     </AuthContext.Provider>
   );

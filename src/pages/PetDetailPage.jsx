@@ -71,16 +71,16 @@ export default function PetDetailPage() {
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">{pet.name}&apos;s Profile</h1>
-          <p className="text-gray-500">{pet.breed || pet.species} {pet.birthDate && `• ${new Date().getFullYear() - new Date(pet.birthDate).getFullYear()} yrs`}</p>
+          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{pet.name}&apos;s Profile</h1>
+          <p className="text-slate-500 mt-0.5">{pet.breed || pet.species} {pet.birthDate && `• ${new Date().getFullYear() - new Date(pet.birthDate).getFullYear()} yrs`}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:flex-shrink-0">
-          <Link to={`/pets/${id}/edit`} className="inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+          <Link to={`/pets/${id}/edit`} className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
             Edit Pet
           </Link>
-          <button onClick={handleCopyCareSheet} disabled={copying} className="inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary-dark gap-2 disabled:opacity-70">
+          <button onClick={handleCopyCareSheet} disabled={copying} className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark gap-2 disabled:opacity-70 transition-colors shadow-sm">
             {copying && <LoadingSpinner size="sm" />}
             {copying ? 'Copying...' : (shareUrl ? 'Copied!' : 'Copy Care Sheet')}
           </button>
@@ -96,14 +96,15 @@ export default function PetDetailPage() {
         />
       )}
 
-      <Card title="Daily Routine">
-        {routines.length > 0 && (
-          <div className="flex justify-end mb-4">
-            <Link to={`/pets/${id}/routines/new`} className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 border border-primary/20 min-h-[44px]">
-              + Add Task
-            </Link>
-          </div>
-        )}
+      <Card
+        title="Daily Routine"
+        headerAction={routines.length > 0 ? (
+          <Link to={`/pets/${id}/routines/new`} className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors shadow-sm">
+            + Add Task
+          </Link>
+        ) : null}
+        headerSubtitle={routines.length > 0 ? `${routines.filter(r => r.isCompletedForCurrentPeriod).length} of ${routines.length} completed today` : null}
+      >
         <RoutineList routines={routines} onComplete={handleCompleteRoutine} onRefresh={refreshRoutines} onAddTask={`/pets/${id}/routines/new`} onDeleteRoutine={refreshRoutines} />
       </Card>
 

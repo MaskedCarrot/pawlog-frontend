@@ -21,6 +21,7 @@ export default function DashboardPage() {
   const { user, isProMember, refreshUser } = useAuth();
   const [pets, setPets] = useState([]);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -63,6 +64,20 @@ export default function DashboardPage() {
       .catch(() => {});
   }, [user?.id, pets]);
 
+  const handleRefresh = async () => {
+    if (!user?.id || refreshing) return;
+    setRefreshing(true);
+    try {
+      await refreshUser();
+      const updatedPets = await getPets(user.id);
+      setPets(updatedPets);
+    } catch {
+      // ignore
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (loading) return <div className="flex justify-center py-12"><LoadingSpinner size="lg" /></div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
@@ -70,17 +85,40 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">
+      <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-8">
         {greetingText}, {user?.name?.split(' ')[0] || 'there'}! {greetingEmoji}
       </h1>
 
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-medium text-gray-800">Your Pets</h2>
-        {pets.length > 0 && (
-          <Link to="/pets/new" className="text-sm font-medium text-primary hover:text-primary-dark">
-            + Add New Pet
-          </Link>
-        )}
+        <h2 className="text-lg font-medium text-slate-800">Your Pets</h2>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
+            aria-label="Refresh"
+          >
+            <svg
+              className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
+          {pets.length > 0 && (
+            <Link
+              to="/pets/new"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors shadow-sm"
+            >
+              <span className="text-base leading-none">+</span>
+              Add New Pet
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -91,9 +129,9 @@ export default function DashboardPage() {
 
       {pets.length === 0 && (
         <Card>
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">No pets yet. Add your first furry friend!</p>
-            <Link to="/pets/new" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary-dark">
+          <div className="text-center py-2">
+            <p className="text-slate-600 mb-5">No pets yet. Add your first furry friend!</p>
+            <Link to="/pets/new" className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors shadow-sm">
               Add Pet
             </Link>
           </div>
@@ -101,9 +139,9 @@ export default function DashboardPage() {
       )}
 
       {!isProMember && (
-        <div className="mt-8 bg-primary/10 rounded-2xl border border-primary/20 p-6">
-          <h3 className="font-semibold text-gray-900 mb-2">⭐ PawLog Pro</h3>
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="mt-8 bg-primary/5 rounded-xl border border-primary/20 p-6">
+          <h3 className="font-semibold text-slate-900 mb-2">⭐ PawLog Pro</h3>
+          <p className="text-sm text-slate-600 mb-4">
             You are on the Free Tier{pets.length >= 1 && ' (1 Pet limit reached)'}. Upgrade to add unlimited pets.
           </p>
           <button
@@ -119,7 +157,7 @@ export default function DashboardPage() {
               }
             }}
             disabled={checkoutLoading}
-            className="px-4 py-2 bg-primary text-white font-medium rounded-xl hover:bg-primary-dark disabled:opacity-70"
+            className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark disabled:opacity-70 transition-colors shadow-sm"
           >
             {checkoutLoading ? 'Loading...' : 'Upgrade for $4.99/mo'}
           </button>

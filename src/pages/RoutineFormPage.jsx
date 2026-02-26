@@ -14,12 +14,17 @@ export default function RoutineFormPage() {
   const isEdit = !!routineId;
 
   const [pet, setPet] = useState(null);
+  const getCurrentTime = () => {
+    const now = new Date();
+    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  };
+
   const [form, setForm] = useState({
     name: '',
     description: '',
     taskType: 'FOOD',
     recurrenceType: 'DAILY',
-    timeOfDay: '09:00',
+    timeOfDay: getCurrentTime(),
     remindMe: false,
     remindMinutesAfter: 10,
     medicine: '',
@@ -104,37 +109,47 @@ export default function RoutineFormPage() {
   return (
     <div>
       <div className="mb-6">
-        <Link to={`/pets/${petId}`} className="text-sm text-gray-500 hover:text-gray-700">← Back to {pet?.name || 'pet'}</Link>
+        <Link to={`/pets/${petId}`} className="text-sm text-slate-500 hover:text-slate-700 transition-colors">← Back to {pet?.name || 'pet'}</Link>
       </div>
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">{isEdit ? 'Edit Task' : 'Add Task'}</h1>
+      <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mb-8">{isEdit ? 'Edit Task' : 'Add Task'}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
         {error && <div className="p-4 bg-red-50 text-red-700 rounded-xl">{error}</div>}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Task type</label>
-          <select value={form.taskType} onChange={(e) => setForm({ ...form, taskType: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary">
+          <label className="block text-sm font-medium text-slate-700 mb-1">Task type</label>
+          <select value={form.taskType} onChange={(e) => setForm({ ...form, taskType: e.target.value })} className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-shadow">
             <option value="FOOD">🥣 Food</option>
             <option value="WALK">🦮 Walk</option>
             <option value="MEDICINE">💊 Medicine</option>
+            <option value="MISC">📋 Other</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-          <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Morning walk" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary" />
+          <label className="block text-sm font-medium text-slate-700 mb-1">Name *</label>
+          <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Morning walk" className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-shadow" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="e.g. 30 min walk" className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary" />
+          <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+          <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="e.g. 30 min walk" className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-shadow" />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-            <input type="time" value={form.timeOfDay} onChange={(e) => setForm({ ...form, timeOfDay: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary" />
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Time</label>
+            <input
+              type="time"
+              value={form.timeOfDay}
+              onChange={(e) => setForm({ ...form, timeOfDay: e.target.value })}
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary min-h-[42px] transition-shadow"
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Recurrence</label>
-            <select value={form.recurrenceType} onChange={(e) => setForm({ ...form, recurrenceType: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/30 focus:border-primary">
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium text-slate-700 mb-1">Recurrence</label>
+            <select
+              value={form.recurrenceType}
+              onChange={(e) => setForm({ ...form, recurrenceType: e.target.value })}
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary min-h-[42px] transition-shadow"
+            >
               <option value="DAILY">Daily</option>
               <option value="WEEKLY">Weekly</option>
               <option value="CUSTOM">Custom</option>
@@ -218,10 +233,10 @@ export default function RoutineFormPage() {
           )}
         </div>
         <div className="flex flex-wrap gap-3 pt-4">
-          <button type="submit" disabled={saving} className="px-6 py-2 bg-primary text-white font-medium rounded-xl hover:bg-primary-dark disabled:opacity-50">
+          <button type="submit" disabled={saving} className="px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark disabled:opacity-50 transition-colors shadow-sm">
             {saving ? 'Saving...' : (isEdit ? 'Save' : 'Add Task')}
           </button>
-          <Link to={`/pets/${petId}`} className="px-6 py-2 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50">
+          <Link to={`/pets/${petId}`} className="px-6 py-2.5 border border-slate-200 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors">
             Cancel
           </Link>
           {isEdit && (
