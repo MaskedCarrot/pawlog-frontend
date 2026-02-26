@@ -81,14 +81,14 @@ export default function RoutineModal({ petId, petName, userId: propUserId, routi
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-              <input type="time" value={form.timeOfDay} onChange={e => setForm({ ...form, timeOfDay: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl" />
+              <input type="time" value={form.timeOfDay} onChange={e => setForm({ ...form, timeOfDay: e.target.value })} className="input-time" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Recurrence</label>
-              <select value={form.recurrenceType} onChange={e => setForm({ ...form, recurrenceType: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-xl">
+              <select value={form.recurrenceType} onChange={e => setForm({ ...form, recurrenceType: e.target.value })} className="input-select">
                 <option value="DAILY">Daily</option>
                 <option value="WEEKLY">Weekly</option>
-                <option value="CUSTOM">Custom</option>
+                <option value="CUSTOM">Does not repeat</option>
               </select>
             </div>
           </div>

@@ -140,7 +140,7 @@ export default function RoutineFormPage() {
               type="time"
               value={form.timeOfDay}
               onChange={(e) => setForm({ ...form, timeOfDay: e.target.value })}
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary min-h-[42px] transition-shadow"
+              className="input-time"
             />
           </div>
           <div className="flex flex-col">
@@ -148,11 +148,11 @@ export default function RoutineFormPage() {
             <select
               value={form.recurrenceType}
               onChange={(e) => setForm({ ...form, recurrenceType: e.target.value })}
-              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary min-h-[42px] transition-shadow"
+              className="input-select"
             >
               <option value="DAILY">Daily</option>
               <option value="WEEKLY">Weekly</option>
-              <option value="CUSTOM">Custom</option>
+              <option value="CUSTOM">Does not repeat</option>
             </select>
           </div>
         </div>
