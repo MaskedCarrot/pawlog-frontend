@@ -95,7 +95,7 @@ const TESTIMONIALS = [
 
 // Curated images that clearly match each resource (dog walking, cat care, feeding, etc.)
 const RESOURCES = [
-  { title: 'Daily walks', url: 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=300&fit=crop', alt: 'Person walking dog on leash outdoors' },
+  { title: 'Daily walks', url: 'https://plus.unsplash.com/premium_photo-1681882152840-a2ae455095b4?w=400&h=300&fit=crop', alt: 'Person walking dog on leash outdoors' },
   { title: 'Cat care', url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop', alt: 'Cat portrait' },
   { title: 'Feeding routine', url: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?w=400&h=300&fit=crop', alt: 'Dog with food bowl' },
   { title: 'Pet care tips', url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop', alt: 'Owner with pet' },
