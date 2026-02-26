@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getPet, createCareSheetShare } from '../api/pets';
+import { getAgeYears } from '../utils/dateUtils';
 import { getRoutines, completeRoutine } from '../api/routines';
 import { getLogs } from '../api/logs';
 import EmergencyBar from '../components/EmergencyBar';
@@ -74,7 +75,7 @@ export default function PetDetailPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{pet.name}&apos;s Profile</h1>
-          <p className="text-slate-500 mt-0.5">{pet.breed || pet.species} {pet.birthDate && `• ${new Date().getFullYear() - new Date(pet.birthDate).getFullYear()} yrs`}</p>
+          <p className="text-slate-500 mt-0.5">{pet.breed || pet.species} {(() => { const age = getAgeYears(pet.birthDate); return age !== null ? `• ${age} yr${age !== 1 ? 's' : ''}` : null; })()}</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:flex-shrink-0">
           <Link to={`/pets/${id}/edit`} className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">

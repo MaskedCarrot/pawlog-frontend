@@ -5,6 +5,7 @@ import EmergencyBar from '../components/EmergencyBar';
 import SharePageHeader from '../components/SharePageHeader';
 import AppFooter from '../components/AppFooter';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { getAgeYears } from '../utils/dateUtils';
 
 function getRoutineIcon(r) {
   const type = r.taskType || (r.medicine ? 'MEDICINE' : r.name?.toLowerCase().includes('walk') ? 'WALK' : 'FOOD');
@@ -16,17 +17,6 @@ function getRoutineIcon(r) {
 
 function getSpeciesEmoji(species) {
   return species === 'CAT' ? '🐈' : '🐕';
-}
-
-function getAgeYears(birthDate) {
-  if (!birthDate) return null;
-  const birth = new Date(birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) {
-    age--;
-  }
-  return Math.max(0, age);
 }
 
 export default function ShareRoutinePage() {

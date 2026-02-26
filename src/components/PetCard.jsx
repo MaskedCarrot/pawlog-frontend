@@ -1,15 +1,5 @@
 import { Link } from 'react-router-dom';
-
-function getAgeYears(birthDate) {
-  if (!birthDate) return null;
-  const birth = new Date(birthDate);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) {
-    age--;
-  }
-  return Math.max(0, age);
-}
+import { getAgeYears } from '../utils/dateUtils';
 
 export default function PetCard({ pet, tasks }) {
   const speciesEmoji = pet.species === 'DOG' ? '🐕' : '🐈';

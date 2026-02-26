@@ -93,6 +93,12 @@ const TESTIMONIALS = [
   { quote: 'No more scribbled notes. One link and my sitter has everything.', name: 'Chris B.', location: 'Boston, MA' },
 ];
 
+const SCREENSHOTS = [
+  { src: '/screenshots/dashboard.png', alt: 'Dashboard with your pets and daily tasks', caption: 'Your pets at a glance' },
+  { src: '/screenshots/shared-routine.png', alt: 'Share care sheet with sitters', caption: 'Share with sitters' },
+  { src: '/screenshots/pet-profile.png', alt: 'Pet profile with routines and logs', caption: 'Routines & logs' },
+];
+
 // Curated images that clearly match each resource (dog walking, cat care, feeding, etc.)
 const RESOURCES = [
   { title: 'Daily walks', url: 'https://plus.unsplash.com/premium_photo-1681882152840-a2ae455095b4?w=400&h=300&fit=crop', alt: 'Person walking dog on leash outdoors' },
@@ -106,8 +112,11 @@ export default function LandingPage() {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [screenshotIndex, setScreenshotIndex] = useState(0);
   const testimonialRef = useRef(null);
   const scrollRef = useRef(null);
+  const screenshotScrollRef = useRef(null);
+  const screenshotTouchRef = useRef(null);
 
   const checkFood = (foodName) => {
     const normalized = foodName.toLowerCase().trim();
@@ -133,6 +142,14 @@ export default function LandingPage() {
     return () => clearInterval(t);
   }, []);
 
+  // Auto-advance screenshots
+  useEffect(() => {
+    const t = setInterval(() => {
+      setScreenshotIndex(i => (i + 1) % SCREENSHOTS.length);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
+
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || !el.offsetWidth) return;
@@ -142,6 +159,15 @@ export default function LandingPage() {
     });
   }, [testimonialIndex]);
 
+  useEffect(() => {
+    const el = screenshotScrollRef.current;
+    if (!el || !el.offsetWidth) return;
+    el.scrollTo({
+      left: screenshotIndex * el.offsetWidth,
+      behavior: 'smooth',
+    });
+  }, [screenshotIndex]);
+
   const handleTouchStart = (e) => { testimonialRef.current = e.touches[0].clientX; };
   const handleTouchEnd = (e) => {
     if (!testimonialRef.current) return;
@@ -150,6 +176,17 @@ export default function LandingPage() {
       setTestimonialIndex(i => diff > 0 ? (i + 1) % TESTIMONIALS.length : (i - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
     }
     testimonialRef.current = null;
+  };
+
+  const handleScreenshotTouchStart = (e) => { screenshotTouchRef.current = e.touches[0]?.clientX; };
+  const handleScreenshotTouchEnd = (e) => {
+    const start = screenshotTouchRef.current;
+    if (start == null) return;
+    const diff = start - (e.changedTouches[0]?.clientX ?? 0);
+    if (Math.abs(diff) > 50) {
+      setScreenshotIndex(i => diff > 0 ? (i + 1) % SCREENSHOTS.length : (i - 1 + SCREENSHOTS.length) % SCREENSHOTS.length);
+    }
+    screenshotTouchRef.current = null;
   };
 
   return (
@@ -279,6 +316,38 @@ export default function LandingPage() {
               onClick={() => setTestimonialIndex(i)}
               className={`h-2 rounded-full transition-all ${i === testimonialIndex ? 'w-6 bg-primary' : 'w-2 bg-gray-300 hover:bg-gray-400'}`}
               aria-label={`Go to testimonial ${i + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-4xl mx-auto px-4 py-12">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6 text-center">See PawLog in action</h2>
+        <div
+          ref={screenshotScrollRef}
+          className="overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory scrollbar-hide"
+          onTouchStart={handleScreenshotTouchStart}
+          onTouchEnd={handleScreenshotTouchEnd}
+        >
+          <div className="flex">
+            {SCREENSHOTS.map((s, i) => (
+              <div key={i} className="flex-shrink-0 w-full px-2 snap-start">
+                <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-xl bg-white max-w-3xl mx-auto">
+                  <img src={s.src} alt={s.alt} className="w-full aspect-[3/4] sm:aspect-[4/3] object-cover object-top" loading={i === 0 ? 'eager' : 'lazy'} />
+                  <p className="p-4 text-base font-medium text-gray-700 text-center">{s.caption}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-center gap-2 mt-4">
+          {SCREENSHOTS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setScreenshotIndex(i)}
+              className={`h-2 rounded-full transition-all ${i === screenshotIndex ? 'w-6 bg-primary' : 'w-2 bg-gray-300 hover:bg-gray-400'}`}
+              aria-label={`View screenshot ${i + 1}`}
             />
           ))}
         </div>
