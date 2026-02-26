@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const SUPPORT_EMAIL = 'support@pawlog.app';
+const SUPPORT_EMAIL = 'support-pawlog@maskedcarrotlabs.com';
 
 export default function AppFooter({ variant = 'default' }) {
   const compact = variant === 'compact';

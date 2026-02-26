@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-lg font-medium text-gray-900 mt-6">How we use it</h2>
           <p>We use your data to provide the service: managing routines, sharing care sheets, and sending reminders.</p>
           <h2 className="text-lg font-medium text-gray-900 mt-6">Contact</h2>
-          <p>Questions? Email us at <a href="mailto:support@pawlog.app" className="text-primary hover:underline">support@pawlog.app</a>.</p>
+          <p>Questions? Email us at <a href="mailto:support-pawlog@maskedcarrotlabs.com" className="text-primary hover:underline">support-pawlog@maskedcarrotlabs.com</a>.</p>
         </div>
       </main>
     </div>

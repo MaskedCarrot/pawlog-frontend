@@ -144,11 +144,11 @@ export default function SettingsPage() {
       </Card>
 
       <Card title="Help & Legal" list>
-          <a href="mailto:support@pawlog.app" className={listRowClass}>
+          <a href="mailto:support-pawlog@maskedcarrotlabs.com" className={listRowClass}>
             <div>
               <p className="font-medium text-slate-900">Contact support</p>
               <p className="text-sm text-slate-500 mt-0.5">Need help? We&apos;ll get back to you.</p>
-              <p className="text-sm text-slate-600 mt-1 font-mono">support@pawlog.app</p>
+              <p className="text-sm text-slate-600 mt-1 font-mono">support-pawlog@maskedcarrotlabs.com</p>
             </div>
             <span className="text-slate-400 group-hover:text-primary transition-colors">→</span>
           </a>
